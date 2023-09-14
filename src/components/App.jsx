@@ -16,6 +16,19 @@ export class App extends Component {
     filter: '',
   };
 
+  componentDidMount() { 
+    const localData = localStorage.getItem('contacts')
+    if (localData && JSON.parse(localData).length) {
+      this.setState({ contacts: JSON.parse(localData) });
+    }
+  }
+
+  componentDidUpdate(_, prevState) { 
+    if (prevState.contacts.length !== this.state.contacts.length) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  } 
+
   createPerson = inputValues => {
     const isAlreadyExist = this.state.contacts.find(
       el => el.name.toLowerCase() === inputValues.name.toLowerCase()
